@@ -1,0 +1,54 @@
+name: CI/CD Pipeline for Node.js App
+
+# Trigger the workflow on push or pull request to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Define the jobs in the pipeline
+jobs:
+  build:
+    # The environment where the job will run
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: npm test
+
+      # Step 5: Set up Docker Buildx (for multi-platform builds, if needed)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Step 6: Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Step 7: Build the Docker image
+      - name: Build and tag Docker image
+        run: docker build -t your-dockerhub-username/your-app-name:latest .
+
+      # Step 8: Push Docker image to Docker Hub
+      - name: Push Docker image
+        run: docker push your-dockerhub-username/your-app-name:latest
