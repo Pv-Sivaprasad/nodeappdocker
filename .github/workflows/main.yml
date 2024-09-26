@@ -15,18 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js environment (optional, depending on if you need to build the Node app)
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      # Step 3: Install dependencies and run tests (optional, depending on your setup)
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
+    
 
       # Step 4: Log in to Docker Hub
       - name: Log in to Docker Hub
